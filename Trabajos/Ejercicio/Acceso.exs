@@ -1,16 +1,16 @@
 defmodule Acceso do
     def main do
-        nombre_Usuario = "Ingrese el nombre de usuario: \n"
+        nombre_Usuario = "Ingrese el nombre de usuario: "
         |> Util.ingresar(:texto)
 
 
-        edad = "Ingrese la edad: \n"
+        edad = "Ingrese la edad: "
         |>Util.ingresar(:entero)
 
-        credenciales = "¿tiene credenciales registradas? Responda con si o no: \n"
+        credenciales = "¿tiene credenciales registradas? Responda con si o no: "
         |>Util.convertir_a_boolean(:si_no)
 
-        intentos_Fallidos = "¿Cuantas intentos fallidos lleva? \n"
+        intentos_Fallidos = "¿Cuantas intentos fallidos lleva?: "
         |>Util.ingresar(:entero)
 
         resultado = validar_Acceso(nombre_Usuario, edad, credenciales, intentos_Fallidos)
@@ -19,24 +19,24 @@ defmodule Acceso do
 
     defp validar_Acceso(nombre_Usuario, edad, credenciales, intentos_Fallidos) do
         unless credenciales do
-          {:error, "No tiene credenciales, acceso denegado"}
+          {:Error, "No tiene credenciales, acceso denegado"}
         else
         unless edad >= 18 do
-            {:erros, "No es Mayor de edad, acceso denegado"}
+            {:Error, "No es Mayor de edad, acceso denegado"}
         else
           unless intentos_Fallidos < 3 do
-            {:error, "Demasiados intesntos, acceso denegado"}
+            {:Error, "Demasiados intentos, acceso denegado"}
           else
-            {:ok, "Acceso concedid. Bienvenido #{nombre_Usuario}."}
+            {:Ok, "Acceso concedido. Bienvenido #{nombre_Usuario}."}
 
                 end
             end
         end
     end
 
-    defp mostrar_resultado({:ok, mensaje}), do: IO.puts(mensaje)
-    defp mostrar_resultado({:error, mensaje}), do: IO.puts(mensaje)
+   defp mostrar_resultado({estado, mensaje}) do
+    IO.puts("{#{estado}: #{mensaje}}")
+    end
 end
-
 
 Acceso.main()
