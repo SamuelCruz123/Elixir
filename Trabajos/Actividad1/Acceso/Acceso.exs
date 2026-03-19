@@ -3,7 +3,11 @@ defmodule Acceso do
         nombre_usuario = "Ingrese un nombre de usuario: "
         |> Util.ingresar(:texto)
 
-        IO.inspect(validar_acceso(nombre_usuario))
+        case validar_acceso(nombre_usuario) do
+        {:ok, mensaje} -> Util.mostrar_mensaje(mensaje)
+        {:error, mensaje} -> Util.mostrar_mensaje(mensaje)
+        end
+        #IO.inspect(validar_acceso(nombre_usuario))#
     end
 
     defp validar_acceso(nombre_usuario) do
@@ -15,6 +19,8 @@ defmodule Acceso do
             true -> {:ok, "Nombre de usuario aceptado, bienvenido #{nombre_usuario}"}
         end
     end
+
+
 end
 
 Acceso.main()
