@@ -1,65 +1,89 @@
-#defmodule ListaRecursiva do
+defmodule ListaRecursiva do
   # Caso base: lista vacía
-  #def suma([]), do: 0
+  def imprimir([]), do: :ok
 
   # Caso recursivo: cabeza + cola
-  #def suma([head | tail]) do
-    #head + suma(tail)
+  def imprimir([head | tail]) do
+    IO.puts(head)
+    imprimir(tail)
+  end
+end
 
-  #end
-#end
+defmodule Votos do
+  def main do
+    candidato =
+      IO.gets("Ingrese candidato: ")
+      |> String.trim()
+      |> String.downcase()
+
+    codigo =
+      IO.gets("Ingrese código de estudiante: ")
+      |> String.trim()
+
+    jornada =
+      IO.gets("Ingrese jornada: ")
+      |> String.trim()
+      |> String.downcase()
+
+    voto = %{
+      candidato: candidato,
+      codigo: codigo,
+      jornada: jornada
+    }
+
+    case validar_voto(voto) do
+      {:ok, mensaje} ->
+        IO.puts(mensaje)
+
+      {:error, errores} ->
+        IO.puts("Se encontraron errores:")
+
+        Enum.each(errores, fn error ->
+          IO.puts("- " <> error)
+        end)
+    end
+  end
+
+  def validar_voto(voto) do
+    []
+    |> validar_candidato(voto)
+    |> validar_codigo_estudiante(voto)
+    |> validar_jornada(voto)
+    |> finalizar()
+  end
+
+  def validar_candidato(errores, voto) do
+    candidatos_validos = ["candidato_a", "candidato_b", "candidato_c"]
+
+    if voto.candidato in candidatos_validos do
+      errores
+    else
+      errores ++ ["Debe elegir uno de los candidatos válidos"]
+    end
+  end
+
+  def validar_codigo_estudiante(errores, voto) do
+    if String.length(voto.codigo) == 8 and String.match?(voto.codigo, ~r/^\d+$/) do
+      errores
+    else
+      errores ++ ["El código debe tener exactamente 8 dígitos numéricos"]
+    end
+  end
+
+  def validar_jornada(errores, voto) do
+    jornadas_validas = ["diurna", "nocturna"]
+
+    if voto.jornada in jornadas_validas do
+      errores
+    else
+      errores ++ ["Debe estar en una jornada válida: diurna o nocturna"]
+    end
+  end
+
+  def finalizar([]), do: {:ok, "Voto registrado correctamente"}
+  def finalizar(errores), do: {:error, errores}
+end
 
 # Ejemplo de uso
-#IO.puts(ListaRecursiva.suma([1, 2, 3, 4]))
-
-def modulo votos do
-  def main do
-    voto =
-
-    Util.leer("Ingrese voto")
-    |> String.trim()
-
-    resultado = validar_votos(voto)
-
-    case resultado do
-      {:ok, voto_valido} ->
-        Util.mostrar_mensaje(m)
-      {:error, voto_invalido}
-    end
-  end
-
-  def validar_votos(voto) do
-    []
-    |>validar_candidato(voto)
-    |>validar_codigo_estudiante(voto)
-    |>validar_jornada(voto)
-    |>final()
-
-  end
-
-  def validar_codigo(e,voto)
-    if string.length(voto)!= 8 do
-      lista ++["debe tener exactamente 8 digitos numericos"]
-    else
-      lista
-    end
-  end
-
-  def validar_jornada(e, voto)
-    if string.contains?[:diurna, :nocturna] do
-      lista
-    else
-      [debe estar en una jornada]
-    end
-  def validar_candidato(e, voto)
-    if string.contains?[":candidato_a", ":candidato_b", ":candidato_c" ]
-    lista
-  else
-  ["debe elegir uno de los candidatos"]
-
-  def final ([])
-    do :{:ok "voto registrado"}
-  def final (e)
-    do :{:error, "errores"}
-
-end
+ListaRecursiva.imprimir([1, 2, 3, 4, 5])
+Votos.main()
