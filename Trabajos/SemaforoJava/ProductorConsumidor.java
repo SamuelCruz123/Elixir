@@ -43,7 +43,7 @@ class Buffer {
     public Buffer(int capacidad) {
         this.capacidad = capacidad;
 
-        espaciosDisponibles = new Semaphore(capacidad);
+        espaciosDisponibles = new Semaphore(this.capacidad);
         productosDisponibles = new Semaphore(0);
         mutex = new Semaphore(1);
     }
