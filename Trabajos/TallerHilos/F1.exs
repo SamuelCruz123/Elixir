@@ -7,35 +7,26 @@ defmodule MatrizProcesos do
       [5, 101, 6, 34]
     ]
 
-    proceso_principal = self()
+    tarea_s1 =
+      Task.async(fn ->
+        sumar_debajo_diagonal(matriz)
+      end)
 
+    tarea_s2 =
+      Task.async(fn ->
+        promedio_matriz(matriz)
+      end)
 
-    spawn(fn ->
-      resultado_s1 = sumar_debajo_diagonal(matriz)
-      send(proceso_principal, {:s1, resultado_s1})
-    end)
-
-    spawn(fn ->
-      resultado_s2 = promedio_matriz(matriz)
-      send(proceso_principal, {:s2, resultado_s2})
-    end)
-
-
-    resultados = esperar_resultados(%{})
-
-    a = resultados[:s1]
-    b = resultados[:s2]
-
+    a = Task.await(tarea_s1)
+    b = Task.await(tarea_s2)
 
     c = a * b
-
 
     IO.puts("S1 - Suma debajo de la diagonal principal: #{a}")
     IO.puts("S2 - Promedio de todos los números: #{b}")
     IO.puts("S3 - C = a * b")
     IO.puts("S4 - Resultado final de C = #{c}")
   end
-
 
   defp sumar_debajo_diagonal(matriz) do
     matriz
@@ -56,7 +47,6 @@ defmodule MatrizProcesos do
     end)
   end
 
-
   defp promedio_matriz(matriz) do
     numeros = List.flatten(matriz)
 
@@ -64,21 +54,6 @@ defmodule MatrizProcesos do
     cantidad = length(numeros)
 
     suma / cantidad
-  end
-
-
-  defp esperar_resultados(resultados) when map_size(resultados) == 2 do
-    resultados
-  end
-
-  defp esperar_resultados(resultados) do
-    receive do
-      {:s1, valor} ->
-        esperar_resultados(Map.put(resultados, :s1, valor))
-
-      {:s2, valor} ->
-        esperar_resultados(Map.put(resultados, :s2, valor))
-    end
   end
 end
 
